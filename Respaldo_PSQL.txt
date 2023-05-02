@@ -1,0 +1,194 @@
+CREATE TABLE "users" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "userFirstName" varchar(30) NOT NULL,
+  "userLastName" varchar(30) NOT NULL,
+  "userEmail" varchar(50) NOT NULL,
+  "userPassword" varchar(16) NOT NULL,
+  "userAge" int NOT NULL,
+  "userCourses_id" int NOT NULL,
+  "userRole_id" int NOT NULL,
+  "userGender_id" int NOT NULL
+);
+
+CREATE TABLE "courses" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "course_title" varchar(50) NOT NULL,
+  "course_description" varchar NOT NULL,
+  "course_level_id" int NOT NULL,
+  "course_teacher_id" int NOT NULL,
+  "course_category_id" int NOT NULL,
+  "course_video_id" int NOT NULL
+);
+
+CREATE TABLE "course_videos" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "video_title" varchar(50) NOT NULL,
+  "video_url" varchar NOT NULL
+);
+
+CREATE TABLE "course_levels" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "course_level" varchar(30) NOT NULL
+);
+
+CREATE TABLE "roles" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "role" varchar(30) NOT NULL
+);
+
+CREATE TABLE "categories" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "category" varchar(50) NOT NULL
+);
+
+CREATE TABLE "users_courses" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "courses_id" int NOT NULL,
+  "users_id" int NOT NULL
+);
+
+CREATE TABLE "gender" (
+  "id" BIGSERIAL PRIMARY KEY,
+  "gender" varchar(10) NOT NULL
+);
+
+ALTER TABLE "users" ADD FOREIGN KEY ("userRole_id") REFERENCES "roles" ("id");
+
+ALTER TABLE "users" ADD FOREIGN KEY ("userGender_id") REFERENCES "gender" ("id");
+
+ALTER TABLE "users_courses" ADD FOREIGN KEY ("users_id") REFERENCES "users" ("id");
+
+ALTER TABLE "users_courses" ADD FOREIGN KEY ("courses_id") REFERENCES "courses" ("id");
+
+ALTER TABLE "courses" ADD FOREIGN KEY ("course_video_id") REFERENCES "course_videos" ("id");
+
+ALTER TABLE "courses" ADD FOREIGN KEY ("course_category_id") REFERENCES "categories" ("id");
+
+ALTER TABLE "courses" ADD FOREIGN KEY ("course_level_id") REFERENCES "course_levels" ("id");
+
+\dt
+
+INSERT INTO gender (gender) VALUES ('Female'), ('Male'), ('Other');
+
+SELECT * FROM gender;
+
+INSERT INTO roles (role) VALUES ('Student'), ('Teacher'), ('Administrator');
+
+SELECT * FROM roles;
+
+INSERT INTO categories (category) VALUES ('Frontend'), ('Backend'), ('css'), ('Fullstack');
+
+SELECT * FROM categories;
+
+\dt
+
+INSERT INTO course_levels (course_level) VALUES ('Beginner'), ('Mid'), ('Advanced');
+
+SELECT * FROM course_levels;
+
+INSERT INTO course_videos (video_title, video_url) VALUES 
+('Fullstack_video', 'urlFullstack_video'), 
+('Backend_video', 'urlBackend_video''Mid'), 
+('Frontend_video', 'urlFrontend_video'),
+('Css_video', 'urlCss_video');
+
+SELECT * FROM course_videos;
+
+ALTER TABLE users DROP COLUMN "userCourses_id";
+
+INSERT INTO users ("userFirstName", "userLastName", "userEmail", "userPassword",
+"userAge", "userRole_id", "userGender_id") VALUES
+('Juan','Arbelaez','juanarbelaez@gmail.com','juan1234',45,1,2),
+('Catalina','Giraldo','catagiraldo@hotmail.com','abcd1234',44,2,1),
+('Ruben','Jaramillo','ruben@gmail.com','efgh1234',43,3,3),
+('Andrea','Arbelaez','andres@outlook.com','ijkl1234',42,1,1),
+('Andres','Campusano','andres@hotmail.com','mnop1234',41,1,2),
+('Gloria','Aristizabal','gloria@gmail.com','qrst1234',40,2,3),
+('Diana','Restrepo','diana@outlook.com','uvwx1234',39,1,1),
+('Jorge','Gonzales','jorge@gmail.com','yzab1234',38,2,2),
+('Patricia','Gomez','patricia@hotmail.com','cdef1234',37,1,1),
+('Raul','Giraldo','raul@gmail.com','ghij1234',36,1,2);
+
+INSERT INTO courses (course_title, course_description, course_level_id,
+course_teacher_id, course_category_id, course_video_id) VALUES
+('Fullstack', 'Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla ',
+1,2, 4, 1),
+('Fullstack', 'Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla ',
+2,6, 4, 1),
+('Fullstack', 'Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla ',
+3,8, 4, 1),
+('Backend', 'Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla ',
+1,2, 2, 2),
+('Backend', 'Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla ',
+2,6, 2, 2),
+('Backend', 'Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla ',
+3,8, 2, 2),
+('Frontend', 'Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla ',
+1,2, 1, 3),
+('Frontend', 'Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla ',
+2,6, 1, 3),
+('Frontend', 'Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla ',
+3,8, 1, 3),
+('Css', 'Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla ',
+1,2, 3, 4),
+('Css', 'Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla ',
+2,6, 3, 4),
+('Css', 'Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla Bla ',
+3,8, 3, 4);
+
+
+INSERT INTO users_courses (courses_id, users_id) VALUES
+(1,1), (1,4), (1,5), (2,7), (3,9), (9, 10), (8,10), (7,10), (10,1);
+
+SELECT * FROM users;
+
+SELECT * FROM users JOIN gender ON users."userGender_id"=gender.id;
+
+SELECT * FROM users JOIN gender ON users."userGender_id"=gender.id JOIN roles ON users."userRole_id"=roles.id;
+
+SELECT users.id, users."userFirstName", users."userLastName", users."userEmail",
+users."userAge", gender.gender, roles.role FROM users 
+JOIN gender ON users."userGender_id"=gender.id
+JOIN roles ON users."userRole_id"=roles.id;
+
+SELECT users.id, users."userFirstName", users."userLastName", courses.course_title,
+course_levels.course_level FROM users 
+JOIN gender ON users."userGender_id"=gender.id
+JOIN roles ON users."userRole_id"=roles.id
+JOIN users_courses ON users.id=users_courses.users_id
+JOIN courses ON users_courses.users_id=courses.id
+JOIN course_levels ON courses.course_level_id=course_levels.id;
+
+INSERT INTO users_courses (courses_id, users_id) VALUES
+(1,1), (2,1), (3,1), (9, 1), (8,1), (7,1), (4,1);
+
+SELECT users.id, users."userFirstName", users."userLastName", courses.course_title,
+course_levels.course_level FROM users 
+JOIN gender ON users."userGender_id"=gender.id
+JOIN roles ON users."userRole_id"=roles.id
+JOIN users_courses ON users.id=users_courses.users_id
+JOIN courses ON users_courses.users_id=courses.id
+JOIN course_levels ON courses.course_level_id=course_levels.id;
+
+SELECT * FROM courses;
+
+SELECT courses.id, courses.course_title, course_levels.course_level FROM courses 
+JOIN course_levels ON course_levels.id=courses.course_level_id;
+
+SELECT courses.id, courses.course_title, course_levels.course_level, 
+users."userFirstName", users."userLastName", categories.category, course_videos.video_url
+FROM courses 
+JOIN course_levels ON course_levels.id=courses.course_level_id
+JOIN users ON courses.course_teacher_id=users.id
+JOIN categories ON categories.id=courses.course_category_id
+JOIN course_videos ON course_videos.id=courses.course_video_id;
+
+UPDATE course_videos SET video_url = 'urlbackend_video' WHERE video_url = 'urlBackend_video''Mid';
+
+SELECT courses.id, courses.course_title, course_levels.course_level, 
+users."userFirstName", users."userLastName", categories.category, course_videos.video_url
+FROM courses 
+JOIN course_levels ON course_levels.id=courses.course_level_id
+JOIN users ON courses.course_teacher_id=users.id
+JOIN categories ON categories.id=courses.course_category_id
+JOIN course_videos ON course_videos.id=courses.course_video_id;
